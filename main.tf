@@ -19,7 +19,7 @@ locals {
 }
 
 resource "local_file" "cloud_init_user_data_file" {
-  content  = templatefile("${path.module}/cloud_init.template", {
+  content = templatefile("${path.module}/cloud_init.template", {
     hostname    = var.hostname
     fqdn        = "${var.hostname}.${var.domain}"
     vm_user     = var.vm_user
@@ -50,6 +50,7 @@ resource "proxmox_vm_qemu" "ubuntu" {
   os_type = "cloud-init"
   clone   = var.template
 
+  agent    = 1
   memory   = var.memory_mb
   sockets  = var.cpu_sockets
   cores    = var.cpu_cores

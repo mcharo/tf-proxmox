@@ -21,7 +21,7 @@ variable "api_password" {
 }
 
 variable "api_host" {
-  type    = string
+  type = string
 }
 
 variable "ssh_password" {
