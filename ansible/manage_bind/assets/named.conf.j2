@@ -1,0 +1,42 @@
+//
+// named.conf
+//
+// Provided by Red Hat bind package to configure the ISC BIND named(8) DNS
+// server as a caching only nameserver (as a localhost DNS resolver only).
+//
+// See /usr/share/doc/bind*/sample/ for example named configuration files.
+//
+// See the BIND Administrator's Reference Manual (ARM) for details about the
+// configuration located in /usr/share/doc/bind-{version}/Bv9ARM.html
+
+acl goodclients {
+{% for subnet in allowed_subnets %}
+	{{ subnet }};
+{% endfor %}
+	localhost;
+	localnets;
+};
+
+options {
+	directory "/var/cache/bind";
+	listen-on { any; };
+	listen-on-v6 { any; };
+	allow-query { goodclients; };
+
+	forwarders {
+{% for forwarder in default_forwarders %}
+		{{ forwarder }};
+{% endfor %}
+	};
+	forward only;
+
+	recursion yes;
+
+	dnssec-validation auto;
+};
+
+{% for include in bind_includes %}
+include "{{ include }}";
+{% endfor %}
+include "/etc/bind/named.conf.local";
+include "/etc/bind/named.conf.default-zones";

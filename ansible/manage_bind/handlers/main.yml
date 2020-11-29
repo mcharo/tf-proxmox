@@ -1,0 +1,33 @@
+---
+
+- name: restart firewalld
+  become: yes
+  service:
+    name: firewalld
+    state: restarted
+
+- name: reload firewalld
+  become: yes
+  service:
+    name: firewalld
+    state: reloaded
+
+- name: restart bind
+  become: yes
+  service:
+    name: "{{ bind_service }}"
+    state: restarted
+    enabled: yes
+
+- name: reload bind
+  become: yes
+  service:
+    name: "{{ bind_service }}"
+    state: reloaded
+    enabled: yes
+
+- name: flush bind
+  become: yes
+  command: rndc flush
+
+...

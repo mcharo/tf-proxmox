@@ -1,0 +1,13 @@
+---
+
+bind_package: bind-chroot
+bind_service: named-chroot
+bind_dir: /etc/named
+bind_conf: /etc/named.conf
+bind_user: named
+bind_group: named
+bind_includes:
+  - /etc/named.rfc1912.zones
+  - /etc/named.root.key
+
+...

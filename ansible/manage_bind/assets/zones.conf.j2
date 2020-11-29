@@ -1,0 +1,11 @@
+{% for key, value in zones.items() %}
+zone "{{ key }}" {
+	type forward;
+	forward only;
+	forwarders {
+{% for forwarder in value.forwarders %}
+		{{ forwarder }};
+{% endfor %}
+	};
+};
+{% endfor %}

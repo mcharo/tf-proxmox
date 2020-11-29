@@ -78,4 +78,8 @@ resource "proxmox_vm_qemu" "ubuntu" {
 
   cicustom = "user=local:snippets/user_data_vm.yml"
 
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i ${self.ssh_host}, --key-file=${path.module}/keys/id_ansible -b -u ${var.vm_user} ${path.module}/ansible/deploy-bind.yml"
+  }
+
 }

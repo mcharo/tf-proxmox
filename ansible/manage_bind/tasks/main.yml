@@ -1,0 +1,47 @@
+---
+
+- name: ping hosts
+  ping:
+
+- name: ensure all hosts are reachable
+  run_once: yes
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: add vars depending on distro
+  include_vars: "{{ ansible_os_family|lower }}.yml"
+
+- name: install and cofigure firewalld for DNS service
+  import_tasks: 'firewalld.yml'
+  when:
+  - firewalld|bool
+
+- name: install {{ bind_package }}
+  yum:
+    name: "{{ bind_package }}"
+    state: present
+
+- name: manage main config
+  become: yes
+  template:
+    src: "assets/named.conf.j2"
+    dest: "/etc/bind/named.conf"
+    backup: 'yes'
+    validate: '/usr/sbin/named-checkconf %s'
+  notify:
+    restart bind
+
+- name: manage zones config
+  become: yes
+  template:
+    src: "assets/zones.conf.j2"
+    dest: "{{ bind_dir }}/named.conf.local"
+    backup: 'no'
+    validate: '/usr/sbin/named-checkconf %s'
+  with_dict: "{{ zones }}"
+  notify:
+  - reload bind
+  - flush bind
+
+...

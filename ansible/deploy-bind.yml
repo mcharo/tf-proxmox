@@ -1,0 +1,7 @@
+- hosts: all
+  gather_facts: yes
+  any_errors_fatal: yes
+  vars_files:
+    - 'vars.yml'
+  roles:
+  - manage_bind

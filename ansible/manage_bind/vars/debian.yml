@@ -1,0 +1,11 @@
+---
+
+bind_package: bind9
+bind_service: named
+bind_dir: /etc/bind
+bind_conf: /etc/bind/named.conf
+bind_user: bind
+bind_group: bind
+bind_includes: []
+
+...
